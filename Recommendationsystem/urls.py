@@ -22,19 +22,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('index', index.index),
-    
-    
-    path('about', index.about),
-    path('team', index.team),
-    path('login', index.login),
-    path('dologin', index.dologin),
-    path('registration', index.registration),
-    path('Reg', index.Reg),
-    
-    path('AdminLogin', index.AdminLogin), 
-    path('AdminDashboard', index.AdminDashboard),
-    path('Add_Food', index.Add_Food)
-    
+    path('', index.index, name='index'),
+    path('about/', index.about, name='about'),
+    path('team/', index.team, name='team'),
+    path('login/', index.login, name='login'),
+    path('dologin/', index.dologin, name='dologin'),
+    path('registration/', index.registration, name='registration'),
+    path('Reg/', index.Reg, name='Reg'),
+    path('AdminLogin/', index.AdminLogin, name='AdminLogin'), 
+    path('AdminDashboard/', index.AdminDashboard, name='AdminDashboard'),
+    path('Add_Food/', index.Add_Food, name='Add_Food')
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
