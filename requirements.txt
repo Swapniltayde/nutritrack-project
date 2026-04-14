@@ -1,0 +1,8 @@
+django
+pymysql
+yahoo_fin
+gunicorn
+whitenoise
+requests
+pandas
+numpy

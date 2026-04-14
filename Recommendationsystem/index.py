@@ -8,16 +8,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import random
 #database Connection
-import pymysql
-
-
-mydb=pymysql.connect(host="localhost",user="root",password="root",database="food_calories_prediction")
+from django.db import connection
 
 def index(request):
     return render(request,"index.html")
-
-
-
 
 def about(request):
     return render(request, "about.html")
@@ -34,11 +28,11 @@ def Reg(request):
         email = request.POST.get('email')
         contact = request.POST.get('contact')
         password = request.POST.get('password')
-        sql = "INSERT INTO registration(name,email,contact,password) VALUES (%s,%s,%s,%s)"
-        values = (name, email, contact, password)
-        cur = mydb.cursor()
-        cur.execute(sql, values)
-        mydb.commit()
+        
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO registration(name,email,contact,password) VALUES (%s,%s,%s,%s)"
+            values = (name, email, contact, password)
+            cursor.execute(sql, values)
         
         return render(request, "login.html") 
 
@@ -48,18 +42,21 @@ def login(request):
 def dologin(request):
     user_email = request.POST.get('email')
     passw = request.POST.get('password')
-    sql = "SELECT * FROM registration;"
-    c1 = mydb.cursor()
-    c1.execute(sql)
-    rows = c1.fetchall()
+    
+    with connection.cursor() as cursor:
+        sql = "SELECT id, name, email, contact, password FROM registration"
+        cursor.execute(sql)
+        rows = cursor.fetchall()
    
     ispresent = False
     id = ""
     for x in rows:
+        # x indexes: 0:id, 1:name, 2:email, 3:contact, 4:password
         if user_email == x[2] and passw == x[4]:
             name = x[1]
             id = x[0]
             ispresent = True
+            break
             
     if ispresent:
         request.session['id'] = id
